@@ -354,7 +354,7 @@ function VaultScreen({ onSelect, t }) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
 
-  coconst filtered = MOVIES.filter(m => {
+  const filtered = MOVIES.filter(m => {
   const matchSearch = search === "" || m.title.toLowerCase().includes(search.toLowerCase());
   const matchType = filter === "all" || m.type === filter;
   return matchSearch && matchType;
