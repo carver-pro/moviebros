@@ -127,7 +127,7 @@ const MOVIES = [
 const COMING_SOON = [
   { id: "cs1", title: "Mandalorian & Grogu", releaseDate: "2026-05-22", emoji: "⭐", type: "movie", tmdbId: 1228710 },
   { id: "cs2", title: "Toy Story 5", releaseDate: "2026-06-19", emoji: "🎸", type: "movie", tmdbId: 1084244 },
-  { id: "cs3", title: "Supergirl", releaseDate: "2026-06-26", emoji: "🦸‍♀️", type: "movie", tmdbId: 1121192 },
+  { id: "cs3", title: "Supergirl", releaseDate: "2026-06-26", emoji: "🦸‍♀️", type: "movie", tmdbId: 1081003 },
   { id: "cs4", title: "The Odyssey", releaseDate: "2026-07-17", emoji: "⚔️", type: "movie", tmdbId: 1124487 },
   { id: "cs5", title: "Spider-Man: Brand New Day", releaseDate: "2026-07-24", emoji: "🕷️", type: "movie", tmdbId: 1129793 },
   { id: "cs6", title: "Avengers: Doomsday", releaseDate: "2026-12-18", emoji: "🦾", type: "movie", tmdbId: 986056 },
@@ -354,11 +354,11 @@ function VaultScreen({ onSelect, t }) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
 
-  const filtered = MOVIES.filter(m => {
-    const matchSearch = m.title.toLowerCase().includes(search.toLowerCase());
-    const matchType = filter === "all" || m.type === filter;
-    return matchSearch && matchType;
-  });
+  coconst filtered = MOVIES.filter(m => {
+  const matchSearch = search === "" || m.title.toLowerCase().includes(search.toLowerCase());
+  const matchType = filter === "all" || m.type === filter;
+  return matchSearch && matchType;
+});
 
   const movies = MOVIES.filter(m => m.type === "movie");
   const shows = MOVIES.filter(m => m.type === "tv");
