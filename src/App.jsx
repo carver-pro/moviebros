@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // ── CONSTANTS ─────────────────────────────────────────────────
 const BROS = ["craig", "jake", "mike", "tyler"];
 const BRO_COLORS = { craig: "#E8B84B", jake: "#4ECDC4", mike: "#FF6B6B", tyler: "#A78BFA" };
 const BRO_INITIALS = { craig: "C", jake: "J", mike: "M", tyler: "T" };
 const FONT = "'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+const TMDB_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
 // ── THEMES ────────────────────────────────────────────────────
 const DARK = {
@@ -33,8 +34,7 @@ const LIGHT = {
 // ── DATA ──────────────────────────────────────────────────────
 const MOVIES = [
   {
-    id: 1, title: "Oppenheimer", year: 2023, genre: "Drama", type: "movie",
-    poster: "https://image.tmdb.org/t/p/w300/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
+    id: 1, title: "Oppenheimer", year: 2023, genre: "Drama", type: "movie", tmdbId: 872585,
     ratings: {
       craig: { hype: 9, bro: 8.5, rewatch: 7 }, jake: { hype: 10, bro: 9, rewatch: 8.5 },
       mike: { hype: 7, bro: 6.5, rewatch: 5 }, tyler: { hype: 8.5, bro: 9, rewatch: 7 },
@@ -47,8 +47,7 @@ const MOVIES = [
     },
   },
   {
-    id: 2, title: "The Batman", year: 2022, genre: "Action", type: "movie",
-    poster: "https://image.tmdb.org/t/p/w300/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+    id: 2, title: "The Batman", year: 2022, genre: "Action", type: "movie", tmdbId: 414906,
     ratings: {
       craig: { hype: 8.5, bro: 9, rewatch: 9 }, jake: { hype: 7, bro: 8.5, rewatch: 8 },
       mike: { hype: 9, bro: 10, rewatch: 10 }, tyler: { hype: 6.5, bro: 7, rewatch: 6 },
@@ -61,8 +60,7 @@ const MOVIES = [
     },
   },
   {
-    id: 3, title: "Top Gun: Maverick", year: 2022, genre: "Action", type: "movie",
-    poster: "https://image.tmdb.org/t/p/w300/62HCnUTziyWcpDaBO2i1DX17ljH.jpg",
+    id: 3, title: "Top Gun: Maverick", year: 2022, genre: "Action", type: "movie", tmdbId: 361743,
     ratings: {
       craig: { hype: 10, bro: 10, rewatch: 10 }, jake: { hype: 9, bro: 10, rewatch: 9 },
       mike: { hype: 8, bro: 9, rewatch: 8 }, tyler: { hype: 10, bro: 10, rewatch: 10 },
@@ -74,8 +72,7 @@ const MOVIES = [
     },
   },
   {
-    id: 4, title: "Dune: Part Two", year: 2024, genre: "Sci-Fi", type: "movie",
-    poster: "https://image.tmdb.org/t/p/w300/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg",
+    id: 4, title: "Dune: Part Two", year: 2024, genre: "Sci-Fi", type: "movie", tmdbId: 693134,
     ratings: {
       craig: { hype: 8, bro: 7.5, rewatch: 6 }, jake: { hype: 9, bro: 8, rewatch: 7.5 },
       mike: { hype: 6, bro: 4.5, rewatch: 4 }, tyler: { hype: 8.5, bro: 7, rewatch: 6 },
@@ -87,8 +84,7 @@ const MOVIES = [
     },
   },
   {
-    id: 5, title: "The Last of Us", year: 2023, genre: "Drama", type: "tv",
-    poster: "https://image.tmdb.org/t/p/w300/uKvVjHNqB5VmOrdxqAt2F7J78ED.jpg",
+    id: 5, title: "The Last of Us", year: 2023, genre: "Drama", type: "tv", tmdbId: 100088,
     ratings: {
       craig: { hype: 10, bro: 10, rewatch: 9 }, jake: { hype: 9.5, bro: 9, rewatch: 8.5 },
       mike: { hype: 8, bro: 8.5, rewatch: 7 }, tyler: { hype: 9, bro: 9.5, rewatch: 8 },
@@ -101,8 +97,7 @@ const MOVIES = [
     },
   },
   {
-    id: 6, title: "Severance", year: 2022, genre: "Thriller", type: "tv",
-    poster: "https://image.tmdb.org/t/p/w300/dmoU0bFRsRqHGAEiWOkC0m6R0K8.jpg",
+    id: 6, title: "Severance", year: 2022, genre: "Thriller", type: "tv", tmdbId: 95396,
     ratings: {
       craig: { hype: 9, bro: 8.5, rewatch: 7.5 }, jake: { hype: 8, bro: 9, rewatch: 8 },
       mike: { hype: 7.5, bro: 7, rewatch: 6 }, tyler: { hype: 9.5, bro: 9, rewatch: 8.5 },
@@ -115,8 +110,7 @@ const MOVIES = [
     },
   },
   {
-    id: 7, title: "Shogun", year: 2024, genre: "Drama", type: "tv",
-    poster: "https://image.tmdb.org/t/p/w300/7O4iVfOMQmdCSxhOg1WnzO1TnaQ.jpg",
+    id: 7, title: "Shogun", year: 2024, genre: "Drama", type: "tv", tmdbId: 126308,
     ratings: {
       craig: { hype: 8.5, bro: 9, rewatch: 8 }, jake: { hype: 9, bro: 9.5, rewatch: 9 },
       mike: { hype: 7, bro: 8, rewatch: 6.5 }, tyler: { hype: 8, bro: 8.5, rewatch: 7.5 },
@@ -131,18 +125,12 @@ const MOVIES = [
 ];
 
 const COMING_SOON = [
-  { id: "cs1", title: "Mandalorian & Grogu", releaseDate: "2026-05-22", emoji: "⭐", type: "movie",
-    poster: "https://image.tmdb.org/t/p/w300/sHIxnMgIXISflzPlaMXoRvvkHXE.jpg" },
-  { id: "cs2", title: "Toy Story 5", releaseDate: "2026-06-19", emoji: "🎸", type: "movie",
-    poster: "https://image.tmdb.org/t/p/w300/3eaQNEYgjbEn9J0zHfZuAa7vdy8.jpg" },
-  { id: "cs3", title: "Supergirl", releaseDate: "2026-06-26", emoji: "🦸‍♀️", type: "movie",
-    poster: "https://image.tmdb.org/t/p/w300/vB8o2p4ETnrfiWEgVxHmHWP9yRl.jpg" },
-  { id: "cs4", title: "The Odyssey", releaseDate: "2026-07-17", emoji: "⚔️", type: "movie",
-    poster: "https://image.tmdb.org/t/p/w300/qhVtPDMRFUaIQQBbMgxKGQNHVEh.jpg" },
-  { id: "cs5", title: "Spider-Man: Brand New Day", releaseDate: "2026-07-24", emoji: "🕷️", type: "movie",
-    poster: "https://image.tmdb.org/t/p/w300/gLBmzgUmHikjKfcUYmSHWEKbxLB.jpg" },
-  { id: "cs6", title: "Avengers: Doomsday", releaseDate: "2026-12-18", emoji: "🦾", type: "movie",
-    poster: "https://image.tmdb.org/t/p/w300/eqiGrMPGQNbxpwlOPFRKSLurHJK.jpg" },
+  { id: "cs1", title: "Mandalorian & Grogu", releaseDate: "2026-05-22", emoji: "⭐", type: "movie", tmdbId: 1228710 },
+  { id: "cs2", title: "Toy Story 5", releaseDate: "2026-06-19", emoji: "🎸", type: "movie", tmdbId: 1084244 },
+  { id: "cs3", title: "Supergirl", releaseDate: "2026-06-26", emoji: "🦸‍♀️", type: "movie", tmdbId: 1121192 },
+  { id: "cs4", title: "The Odyssey", releaseDate: "2026-07-17", emoji: "⚔️", type: "movie", tmdbId: 1124487 },
+  { id: "cs5", title: "Spider-Man: Brand New Day", releaseDate: "2026-07-24", emoji: "🕷️", type: "movie", tmdbId: 1129793 },
+  { id: "cs6", title: "Avengers: Doomsday", releaseDate: "2026-12-18", emoji: "🦾", type: "movie", tmdbId: 986056 },
 ];
 
 // ── HELPERS ───────────────────────────────────────────────────
@@ -158,11 +146,51 @@ function daysUntil(dateStr) {
   return Math.ceil((target - today) / 86400000);
 }
 
+// ── TMDB POSTER HOOK ──────────────────────────────────────────
+function useTMDBPoster(tmdbId, type) {
+  const [poster, setPoster] = useState(null);
+  useEffect(() => {
+    if (!tmdbId || !TMDB_KEY) return;
+    const endpoint = type === "tv"
+      ? `https://api.themoviedb.org/3/tv/${tmdbId}?api_key=${TMDB_KEY}`
+      : `https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${TMDB_KEY}`;
+    fetch(endpoint)
+      .then(r => r.json())
+      .then(data => {
+        if (data.poster_path) {
+          setPoster(`https://image.tmdb.org/t/p/w300${data.poster_path}`);
+        }
+      })
+      .catch(() => {});
+  }, [tmdbId, type]);
+  return poster;
+}
+
+// ── POSTER IMAGE ──────────────────────────────────────────────
+function TMDBPoster({ tmdbId, type, alt, style, emoji = "🎬" }) {
+  const poster = useTMDBPoster(tmdbId, type);
+  const t_style = { background: "#1a1a2e", ...style };
+
+  if (!poster) {
+    return (
+      <div style={{ ...t_style, display: "flex", alignItems: "center",
+        justifyContent: "center", fontSize: 28, flexShrink: 0 }}>
+        {emoji}
+      </div>
+    );
+  }
+  return (
+    <img src={poster} alt={alt}
+      style={{ ...t_style, objectFit: "cover", display: "block" }}
+      onError={e => { e.target.style.display = "none"; }} />
+  );
+}
+
 // ── SCORE RING ────────────────────────────────────────────────
 function ScoreRing({ score, color, size = 52, t }) {
   const sw = 5, r = (size - sw * 2) / 2, circ = 2 * Math.PI * r;
   return (
-    <div style={{ position: "relative", width: size, height: size }}>
+    <div style={{ position: "relative", width: size, height: size, flexShrink: 0 }}>
       <svg width={size} height={size} style={{ transform: "rotate(-90deg)", position: "absolute" }}>
         <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={t.scoreTrack} strokeWidth={sw} />
         <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={sw}
@@ -178,13 +206,13 @@ function ScoreRing({ score, color, size = 52, t }) {
 }
 
 // ── HALF-POINT SLIDER ─────────────────────────────────────────
-function HalfPointSlider({ value, onChange, color, t }) {
+function HalfPointSlider({ value, onChange, color }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
       <input type="range" min={0} max={10} step={0.5} value={value}
         onChange={e => onChange(parseFloat(e.target.value))}
         style={{ width: "100%", accentColor: color, cursor: "pointer", height: 6 }} />
-      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: t.textSub }}>
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: "#aaa" }}>
         <span>0</span><span>5</span><span>10</span>
       </div>
     </div>
@@ -192,11 +220,11 @@ function HalfPointSlider({ value, onChange, color, t }) {
 }
 
 // ── TYPE BADGE ────────────────────────────────────────────────
-function TypeBadge({ type, t }) {
+function TypeBadge({ type }) {
   return (
     <span style={{
       fontSize: 9, fontWeight: 800, letterSpacing: 1, textTransform: "uppercase",
-      padding: "2px 7px", borderRadius: 5,
+      padding: "2px 7px", borderRadius: 5, flexShrink: 0,
       background: type === "tv" ? "#A78BFA22" : "#4ECDC422",
       color: type === "tv" ? "#A78BFA" : "#4ECDC4",
       border: `1px solid ${type === "tv" ? "#A78BFA44" : "#4ECDC444"}`,
@@ -250,10 +278,10 @@ function ComingSoonStrip({ t }) {
           return (
             <div key={film.id} style={{ flexShrink: 0, width: 110 }}>
               <div style={{ position: "relative", borderRadius: 12, overflow: "hidden",
-                marginBottom: 8, background: t.posterBg }}>
-                <img src={film.poster} alt={film.title}
-                  style={{ width: 110, height: 155, objectFit: "cover", display: "block" }}
-                  onError={e => { e.target.style.opacity = 0; }} />
+                marginBottom: 8, background: t.posterBg, width: 110, height: 155 }}>
+                <TMDBPoster tmdbId={film.tmdbId} type={film.type} alt={film.title}
+                  emoji={film.emoji}
+                  style={{ width: 110, height: 155, borderRadius: 12 }} />
                 <div style={{ position: "absolute", inset: 0,
                   background: `linear-gradient(to top, ${t.bg} 0%, transparent 55%)` }} />
                 <div style={{ position: "absolute", bottom: 8, left: 0, right: 0, textAlign: "center" }}>
@@ -293,15 +321,14 @@ function MediaRow({ item, onSelect, t }) {
         background: pressed ? t.rowPressed : "transparent",
         borderBottom: `1px solid ${t.borderLight}`,
         cursor: "pointer", transition: "background 0.1s", WebkitTapHighlightColor: "transparent" }}>
-      <img src={item.poster} alt={item.title}
-        style={{ width: 54, height: 78, objectFit: "cover", borderRadius: 8,
-          flexShrink: 0, background: t.posterBg }} />
+      <TMDBPoster tmdbId={item.tmdbId} type={item.type} alt={item.title} emoji="🎬"
+        style={{ width: 54, height: 78, borderRadius: 8, flexShrink: 0 }} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 3 }}>
           <div style={{ fontSize: 16, fontWeight: 800, color: t.text,
             whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
             flex: 1, minWidth: 0 }}>{item.title}</div>
-          <TypeBadge type={item.type} t={t} />
+          <TypeBadge type={item.type} />
         </div>
         <div style={{ fontSize: 12, color: t.textMuted, marginBottom: 10 }}>{item.year} · {item.genre}</div>
         <div style={{ display: "flex", gap: 5 }}>
@@ -350,9 +377,7 @@ function VaultScreen({ onSelect, t }) {
         </div>
       </div>
 
-      {/* Filter tabs */}
-      <div style={{ display: "flex", gap: 0, padding: "10px 16px",
-        borderBottom: `1px solid ${t.borderLight}` }}>
+      <div style={{ display: "flex", padding: "10px 16px", borderBottom: `1px solid ${t.borderLight}` }}>
         {[{ id: "all", label: "All" }, { id: "movie", label: "🎬 Films" },
           { id: "tv", label: "📺 Shows" }].map(f => (
           <button key={f.id} onClick={() => setFilter(f.id)} style={{
@@ -369,7 +394,6 @@ function VaultScreen({ onSelect, t }) {
 
       <ComingSoonStrip t={t} />
 
-      {/* Stats strip */}
       <div style={{ display: "flex", padding: "10px 16px", gap: 8,
         borderBottom: `1px solid ${t.borderLight}`, overflowX: "auto" }}>
         {[{ label: "Films", value: movies.length },
@@ -439,7 +463,7 @@ function LeaderboardScreen({ t }) {
 
       {stats.map((s, i) => (
         <div key={s.bro} style={{
-          background: i === 0 ? t.cardBg : t.cardBg,
+          background: t.cardBg,
           border: `1px solid ${i === 0 ? "#E8B84B44" : t.border}`,
           borderRadius: 18, padding: 18, marginBottom: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 14 }}>
@@ -584,16 +608,8 @@ function BeefScreen({ t }) {
           padding: "14px 16px", marginBottom: 10,
           border: `1px solid ${gap >= 2 ? "#FF6B6B44" : t.border}`,
           display: "flex", alignItems: "center", gap: 14 }}>
-          <div style={{ position: "relative" }}>
-            <img src={movie.poster} alt={movie.title}
-              style={{ width: 44, height: 60, objectFit: "cover", borderRadius: 6,
-                flexShrink: 0, background: t.posterBg, display: "block" }} />
-            <div style={{ position: "absolute", top: -4, right: -4,
-              background: movie.type === "tv" ? "#A78BFA" : "#4ECDC4",
-              borderRadius: 4, padding: "1px 4px", fontSize: 8, fontWeight: 800, color: "#000" }}>
-              {movie.type === "tv" ? "TV" : "FM"}
-            </div>
-          </div>
+          <TMDBPoster tmdbId={movie.tmdbId} type={movie.type} alt={movie.title} emoji="🎬"
+            style={{ width: 44, height: 60, borderRadius: 6, flexShrink: 0 }} />
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 14, fontWeight: 800, color: t.text, marginBottom: 6,
               whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{movie.title}</div>
@@ -623,13 +639,12 @@ function BeefScreen({ t }) {
             <div key={m.id} style={{ background: t.surface, borderRadius: 14, padding: "12px 16px",
               marginBottom: 10, border: "1px solid #4ECDC433",
               display: "flex", alignItems: "center", gap: 12 }}>
-              <img src={m.poster} alt={m.title}
-                style={{ width: 36, height: 50, objectFit: "cover", borderRadius: 6,
-                  flexShrink: 0, background: t.posterBg }} />
+              <TMDBPoster tmdbId={m.tmdbId} type={m.type} alt={m.title} emoji="🎬"
+                style={{ width: 36, height: 50, borderRadius: 6, flexShrink: 0 }} />
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 14, fontWeight: 700, color: t.text,
                   whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{m.title}</div>
-                <TypeBadge type={m.type} t={t} />
+                <TypeBadge type={m.type} />
               </div>
               <div style={{ fontSize: 14, fontWeight: 900, color: "#4ECDC4" }}>
                 {userScore(m.ratings[bro1])}
@@ -672,13 +687,12 @@ function DetailSheet({ item, onClose, t }) {
         </div>
 
         <div style={{ display: "flex", gap: 16, padding: "16px 20px 20px" }}>
-          <img src={item.poster} alt={item.title}
-            style={{ width: 70, height: 100, objectFit: "cover", borderRadius: 10,
-              flexShrink: 0, background: t.posterBg }} />
+          <TMDBPoster tmdbId={item.tmdbId} type={item.type} alt={item.title} emoji="🎬"
+            style={{ width: 70, height: 100, borderRadius: 10, flexShrink: 0 }} />
           <div style={{ flex: 1 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, flexWrap: "wrap" }}>
               <div style={{ fontSize: 20, fontWeight: 900, color: t.text, lineHeight: 1.2 }}>{item.title}</div>
-              <TypeBadge type={item.type} t={t} />
+              <TypeBadge type={item.type} />
             </div>
             <div style={{ fontSize: 13, color: t.textMuted, marginBottom: 14 }}>{item.year} · {item.genre}</div>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -735,7 +749,7 @@ function DetailSheet({ item, onClose, t }) {
                         </div>
                         <HalfPointSlider value={localRatings[bro][cat]}
                           onChange={val => updateRating(bro, cat, val)}
-                          color={BRO_COLORS[bro]} t={t} />
+                          color={BRO_COLORS[bro]} />
                       </div>
                     ))}
                   </div>
@@ -832,7 +846,6 @@ export default function MovieBros() {
       color: t.text, maxWidth: 430, margin: "0 auto", position: "relative",
       transition: "background 0.25s, color 0.25s" }}>
 
-      {/* Header */}
       <div style={{ position: "sticky", top: 0, zIndex: 50,
         background: t.headerBg, backdropFilter: "blur(20px)",
         borderBottom: `1px solid ${t.border}`, padding: "14px 20px 12px",
@@ -853,7 +866,6 @@ export default function MovieBros() {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          {/* Theme toggle */}
           <button onClick={() => setDarkMode(d => !d)} style={{
             width: 44, height: 26, borderRadius: 13,
             background: darkMode ? "#E8B84B" : t.border,
@@ -871,7 +883,6 @@ export default function MovieBros() {
               {darkMode ? "🌙" : "☀️"}
             </div>
           </button>
-
           <div style={{ display: "flex", gap: 5 }}>
             {BROS.map(bro => (
               <div key={bro} style={{ width: 28, height: 28, borderRadius: "50%",
