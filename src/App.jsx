@@ -9,26 +9,28 @@ const TMDB_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
 // ── THEMES ────────────────────────────────────────────────────
 const DARK = {
-  bg: "#07070f", surface: "#0f0f1a", surfaceAlt: "#0a0a15",
-  border: "#1e1e32", borderLight: "#12121f",
-  text: "#ffffff", textMuted: "#555555", textSub: "#333333",
-  navBg: "rgba(7,7,15,0.97)", headerBg: "rgba(7,7,15,0.95)",
-  cardBg: "linear-gradient(160deg, #0f0f1a, #1a1a2e)",
-  rowPressed: "#13132a", inputBg: "#0f0f1a",
-  posterBg: "#1a1a2e", scoreTrack: "#1a1a2e",
-  sheetBg: "#0d0d1e", sheetHandle: "#2a2a3e",
-  beefCard: "#110808", tabActive: "#1e1e3a", tabActiveBorder: "#2a2a4e",
+  bg: "#0A0F1E", surface: "#0F1628", surfaceAlt: "#0D1220",
+  border: "#1A2440", borderLight: "#141E30",
+  text: "#F0FDFA", textMuted: "#2A4A5A", textSub: "#1A3040",
+  navBg: "rgba(10,15,30,0.97)", headerBg: "rgba(10,15,30,0.95)",
+  cardBg: "linear-gradient(160deg, #0F1628, #1A2440)",
+  rowPressed: "#141E30", inputBg: "#0F1628",
+  posterBg: "#1A2440", scoreTrack: "#1A2440",
+  sheetBg: "#0D1220", sheetHandle: "#1A2440",
+  beefCard: "#0F1220", tabActive: "#0D2E2A", tabActiveBorder: "#0F766E",
+  accent: "#2DD4BF",
 };
 const LIGHT = {
-  bg: "#f5f5f0", surface: "#ffffff", surfaceAlt: "#f0f0ea",
-  border: "#e0e0d8", borderLight: "#e8e8e0",
-  text: "#111111", textMuted: "#888888", textSub: "#bbbbbb",
-  navBg: "rgba(245,245,240,0.97)", headerBg: "rgba(245,245,240,0.95)",
-  cardBg: "linear-gradient(160deg, #ffffff, #f5f5f0)",
-  rowPressed: "#ebebE3", inputBg: "#ffffff",
-  posterBg: "#e0e0d8", scoreTrack: "#e8e8e0",
-  sheetBg: "#ffffff", sheetHandle: "#d8d8d0",
-  beefCard: "#fff5f5", tabActive: "#f0f0ff", tabActiveBorder: "#d0d0e8",
+  bg: "#FAF6F0", surface: "#FFF8F2", surfaceAlt: "#F5EDE4",
+  border: "#E8DDD0", borderLight: "#F0E8E0",
+  text: "#1C0A0A", textMuted: "#A08070", textSub: "#C8B8A8",
+  navBg: "rgba(250,246,240,0.97)", headerBg: "rgba(250,246,240,0.95)",
+  cardBg: "linear-gradient(160deg, #FFF8F2, #FAF6F0)",
+  rowPressed: "#F0E4D8", inputBg: "#FFF8F2",
+  posterBg: "#E8D8CC", scoreTrack: "#E8D8CC",
+  sheetBg: "#FFF8F2", sheetHandle: "#E8DDD0",
+  beefCard: "#FFF0EE", tabActive: "#FEE2E2", tabActiveBorder: "#FCA5A5",
+  accent: "#B91C1C",
 };
 
 // ── DATA ──────────────────────────────────────────────────────
