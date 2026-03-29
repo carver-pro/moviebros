@@ -191,14 +191,15 @@ function ScoreRing({ score, color, size = 52, t }) {
   const sw = 5, r = (size - sw * 2) / 2, circ = 2 * Math.PI * r;
   return (
     <div style={{ position: "relative", width: size, height: size, flexShrink: 0 }}>
-      <svg width={size} height={size} style={{ transform: "rotate(-90deg)", position: "absolute" }}>
+      <svg width={size} height={size} style={{ transform: "rotate(-90deg)", position: "absolute", top: 0, left: 0 }}>
         <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={t.scoreTrack} strokeWidth={sw} />
         <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={sw}
           strokeDasharray={circ} strokeDashoffset={circ * (1 - parseFloat(score) / 10)}
           strokeLinecap="round" />
       </svg>
-      <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center",
-        justifyContent: "center", fontSize: size * 0.27, fontWeight: 900, color: t.text }}>
+      <div style={{ position: "absolute", top: 0, left: 0, width: size, height: size,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        fontSize: size * 0.27, fontWeight: 900, color: t.text, lineHeight: 1 }}>
         {score}
       </div>
     </div>
@@ -355,7 +356,7 @@ function VaultScreen({ onSelect, t }) {
   const [filter, setFilter] = useState("all");
 
   const filtered = MOVIES.filter(m => {
-  const matchSearch = search === "" || m.title.toLowerCase().includes(search.toLowerCase());
+  const matchSearch = !search || m.title.toLowerCase().includes(search.toLowerCase());
   const matchType = filter === "all" || m.type === filter;
   return matchSearch && matchType;
 });
